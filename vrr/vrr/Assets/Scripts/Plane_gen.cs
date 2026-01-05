@@ -12,9 +12,11 @@ public class Plane_gen : MonoBehaviour
     MeshFilter meshFilter;
     int x = 0;
     public stopOnCollision col2;
+
+
    // public atom2 sph;
      Vector3 hillCenter;
-     stopOnCollision[] spheres;
+     public stopOnCollision[] spheres;
      Vector3[] baseVertices; // store initial flat plane
    
     
@@ -71,7 +73,7 @@ void Start()
     for (int i = 0; i < vertices.Count; i++)
         vertices[i] = baseVertices[i];
         
-        float hillRadius = planeSize.x / 5f;
+       
            
 
        
@@ -83,6 +85,7 @@ void Start()
                 float  x = col.gameObject.transform.position.x;
                 float z = col.gameObject.transform.position.z;
                 Vector3 hillCenter = new Vector3(x,0,z);
+                float hillRadius = col.radius;
                 float hillHeight = 3f * col.type ; 
 
                 Hill(hillCenter, hillRadius, hillHeight);

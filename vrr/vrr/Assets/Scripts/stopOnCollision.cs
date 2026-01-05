@@ -7,6 +7,10 @@ public class stopOnCollision : MonoBehaviour
      public bool is_collide;
      public bool oncollision;
      public int type;
+     public float radius;
+     
+
+    
 
     void Start()
     {
@@ -15,6 +19,7 @@ public class stopOnCollision : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         is_collide = false;
         oncollision = false;
+      
 
         if (rb == null)
         {
