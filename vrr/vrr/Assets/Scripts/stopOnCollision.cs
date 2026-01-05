@@ -6,6 +6,7 @@ public class stopOnCollision : MonoBehaviour
      public GameObject plane;
      public bool is_collide;
      public bool oncollision;
+     public int type;
 
     void Start()
     {

@@ -15,6 +15,7 @@ public class Plane_gen : MonoBehaviour
    // public atom2 sph;
      Vector3 hillCenter;
      stopOnCollision[] spheres;
+     Vector3[] baseVertices; // store initial flat plane
    
     
      
@@ -32,6 +33,7 @@ public class Plane_gen : MonoBehaviour
 void Start()
 {
     GeneratePlane(planeSize, planeResolution);
+    baseVertices = vertices.ToArray(); // copy flat plane
     AssignMesh();
     collide();
 }
@@ -65,9 +67,12 @@ void Start()
 
         //GeneratePlane(planeSize,planeResolution);
         //Vector3 hillCenter = new Vector3(planeSize.x / 2f, 0, planeSize.y / 2f);
+        // Reset vertices to base
+    for (int i = 0; i < vertices.Count; i++)
+        vertices[i] = baseVertices[i];
         
         float hillRadius = planeSize.x / 5f;
-        float hillHeight = 3f;    
+           
 
        
        foreach (var col in spheres)
@@ -78,6 +83,7 @@ void Start()
                 float  x = col.gameObject.transform.position.x;
                 float z = col.gameObject.transform.position.z;
                 Vector3 hillCenter = new Vector3(x,0,z);
+                float hillHeight = 3f * col.type ; 
 
                 Hill(hillCenter, hillRadius, hillHeight);
             }
@@ -152,7 +158,7 @@ void Hill(Vector3 center, float radius, float height)
 
         // ADD to vertex.y instead of replacing
         // Use Mathf.Max for merging hills smoothly
-        v.y = Mathf.Max(v.y, height * falloff); 
+        v.y += height * falloff;
         vertices[i] = v;
     }
 }
