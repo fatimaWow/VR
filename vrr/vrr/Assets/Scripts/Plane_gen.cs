@@ -14,6 +14,7 @@ public class Plane_gen : MonoBehaviour
     public stopOnCollision col2;
    // public atom2 sph;
      Vector3 hillCenter;
+     stopOnCollision[] spheres;
    
     
      
@@ -28,52 +29,65 @@ public class Plane_gen : MonoBehaviour
 
     
     
+void Start()
+{
+    GeneratePlane(planeSize, planeResolution);
+    AssignMesh();
+    collide();
+}
 
     //sdafag
     void Awake()
     {
-        col2 = FindObjectOfType<stopOnCollision>();
+       
+       
         //sph = FindObjectOfType<atom2>();
         myMesh = new Mesh();
         meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = myMesh;
+
+        spheres = FindObjectsOfType<stopOnCollision>();
+
+        
         
     }
 
-    public void setCenter(Vector3 vector){
-        hillCenter = vector;
-     }
+    //public void setCenter(Vector3 vector){
+     //   hillCenter = vector;
+     //}
    
 
      void Update()
     {
         //min avoids errors, max keeps preformance sane
         planeResolution = Mathf.Clamp(planeResolution,1,50);
-         GeneratePlane(planeSize,planeResolution);
+        // GeneratePlane(planeSize,planeResolution);
 
         //GeneratePlane(planeSize,planeResolution);
         //Vector3 hillCenter = new Vector3(planeSize.x / 2f, 0, planeSize.y / 2f);
         
-        float hillRadius = Mathf.Min(planeSize.x, planeSize.y) / 5f;
+        float hillRadius = planeSize.x / 5f;
         float hillHeight = 3f;    
 
        
+       foreach (var col in spheres)
+        {
+            if (col.is_collide)
+            {
+                // convert world position to local plane space
+                float  x = col.gameObject.transform.position.x;
+                float z = col.gameObject.transform.position.z;
+                Vector3 hillCenter = new Vector3(x,0,z);
 
-        if(col2.is_collide == true){
-          
-               
-           Hill(hillCenter, hillRadius, hillHeight);
-
+                Hill(hillCenter, hillRadius, hillHeight);
+            }
         }
 
        
         
         AssignMesh();
 
-        if(x==0){
-            collide();
-            x++;
-        }
+        
 
       
     }
@@ -122,24 +136,24 @@ public class Plane_gen : MonoBehaviour
         myMesh.triangles = triangles.ToArray();
     }
 
-     void Hill(Vector3 center, float radius, float height)
+void Hill(Vector3 center, float radius, float height)
 {
-    for(int i = 0; i < vertices.Count; i++)
+    for (int i = 0; i < vertices.Count; i++)
     {
-        Vector3 vertex = vertices[i];
+        Vector3 v = vertices[i];
 
-        // Distance from hill center in XZ plane
-        float dx = vertex.x - center.x;
-        float dz = vertex.z - center.z;
-        float dist = Mathf.Sqrt(dx*dx + dz*dz);
+        float dx = v.x - center.x;
+        float dz = v.z - center.z;
+        float dist = Mathf.Sqrt(dx * dx + dz * dz);
 
-        if(dist > radius) continue;
+        if (dist > radius) continue;
 
-        // Smooth dome falloff
         float falloff = 1f - (dist / radius) * (dist / radius);
 
-        vertex.y = height *falloff; // replace vertex.y
-        vertices[i] = vertex;
+        // ADD to vertex.y instead of replacing
+        // Use Mathf.Max for merging hills smoothly
+        v.y = Mathf.Max(v.y, height * falloff); 
+        vertices[i] = v;
     }
 }
 

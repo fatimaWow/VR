@@ -4,7 +4,7 @@ public class atom2 : MonoBehaviour
 {
 
     public Vector3 pos; 
-    public stopOnCollision col;
+    //public stopOnCollision col;
     public Plane_gen plane;
     public Transform trans;
 
@@ -13,7 +13,7 @@ public class atom2 : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        col = FindObjectOfType<stopOnCollision>();
+       // col = FindObjectOfType<stopOnCollision>();
         plane = FindObjectOfType<Plane_gen>();
         
     }
@@ -24,14 +24,13 @@ public class atom2 : MonoBehaviour
     {
         //GetComponent<Rigidbody>().position = pos;
 
-        if(col.is_collide == true){
-        float ex = gameObject.transform.position.x;
-        float wy = gameObject.transform.position.y;
-        float ze = gameObject.transform.position.z;
+        //if(col.is_collide == true){
+        //float ex = gameObject.transform.position.x;
+       // float ze = gameObject.transform.position.z;
 
     
-         plane.setCenter(new Vector3( ex, 0, ze));
-        }
+        // plane.setCenter(new Vector3( ex, 0, ze));
+        //}
         
     }
 }
