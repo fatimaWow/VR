@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64f9b4832a8fc30479a487242c783a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Plane_gen
+  col2: {fileID: 0}
   planeSize: {x: 20, y: 20}
   planeResolution: 15
 --- !u!33 &3870579
@@ -882,9 +883,9 @@ GameObject:
   - component: {fileID: 618036756}
   - component: {fileID: 618036755}
   - component: {fileID: 618036760}
-  - component: {fileID: 618036761}
   - component: {fileID: 618036762}
   - component: {fileID: 618036763}
+  - component: {fileID: 618036764}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -979,7 +980,7 @@ Transform:
   m_GameObject: {fileID: 618036754}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.04, y: -0.36, z: 5.45}
+  m_LocalPosition: {x: -3.76, y: 10.27, z: 11.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1012,21 +1013,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &618036761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 618036754}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7d6fded6de94aa4ebd88024cb1fe040, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Sphere
-  pos: {x: 0, y: 0, z: 0}
-  col: {fileID: 0}
-  plane: {fileID: 3870578}
 --- !u!114 &618036762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1170,6 +1156,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::stopOnCollision
   rb: {fileID: 0}
   plane: {fileID: 3870576}
+  is_collide: 0
+  oncollision: 0
+--- !u!114 &618036764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618036754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9988742b1aacb2c428d0c8f5babd23f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::atom2
+  pos: {x: 0, y: 0, z: 0}
+  col: {fileID: 0}
+  plane: {fileID: 0}
+  trans: {fileID: 0}
 --- !u!1 &651450960
 GameObject:
   m_ObjectHideFlags: 0

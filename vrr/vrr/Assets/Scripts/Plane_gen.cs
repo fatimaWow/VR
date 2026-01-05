@@ -11,33 +11,63 @@ public class Plane_gen : MonoBehaviour
     Mesh myMesh;
     MeshFilter meshFilter;
     int x = 0;
+    public stopOnCollision col2;
+   // public atom2 sph;
+     Vector3 hillCenter;
+   
+    
+     
 
     //plane settings
-    [SerializeField] Vector2 planeSize = new Vector2(1,1);
+    [SerializeField]  Vector2 planeSize = new Vector2(1,1);
     [SerializeField] int planeResolution = 1;
 
     //mesh values
     List<Vector3> vertices;
     List<int> triangles;
 
+    
+    
+
     //sdafag
     void Awake()
     {
+        col2 = FindObjectOfType<stopOnCollision>();
+        //sph = FindObjectOfType<atom2>();
         myMesh = new Mesh();
         meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = myMesh;
+        
     }
+
+    public void setCenter(Vector3 vector){
+        hillCenter = vector;
+     }
+   
 
      void Update()
     {
         //min avoids errors, max keeps preformance sane
         planeResolution = Mathf.Clamp(planeResolution,1,50);
+         GeneratePlane(planeSize,planeResolution);
 
-        GeneratePlane(planeSize,planeResolution);
-        Vector3 hillCenter = new Vector3(planeSize.x / 2f, 0, planeSize.y / 2f);
+        //GeneratePlane(planeSize,planeResolution);
+        //Vector3 hillCenter = new Vector3(planeSize.x / 2f, 0, planeSize.y / 2f);
+        
         float hillRadius = Mathf.Min(planeSize.x, planeSize.y) / 5f;
         float hillHeight = 3f;    
-        Hill(hillCenter, hillRadius, hillHeight);
+
+       
+
+        if(col2.is_collide == true){
+          
+               
+           Hill(hillCenter, hillRadius, hillHeight);
+
+        }
+
+       
+        
         AssignMesh();
 
         if(x==0){
@@ -47,6 +77,9 @@ public class Plane_gen : MonoBehaviour
 
       
     }
+
+  
+
 
     void GeneratePlane (Vector2 size, int resolution)
     {
