@@ -1,45 +1,59 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class stopOnCollision : MonoBehaviour
 {
-    public Rigidbody rb;
-    public bool is_collide;
-    public bool oncollision;
-    public float radius = 1f;
-    public float type = 1f;
+     public Rigidbody rb;
+     public GameObject plane;
+     public bool is_collide;
+     public bool oncollision;
+     public int type;
+     public float radius;
+     
+
+    
+
+    void Start()
+    {
+        // Get the Rigidbody component attached to this object
+        
+        rb = GetComponent<Rigidbody>();
+        is_collide = false;
+        oncollision = false;
+      
+
+        if (rb == null)
+        {
+            Debug.LogError("StopOnCollision script requires a Rigidbody component!");
+            enabled = false; // Disable the script if no Rigidbody is found
+        }
+    }
+
+    void Update(){
+        if( oncollision = false){
+            is_collide = false;
+        }
+       
+    }
 
    
 
-    void Awake()
+    // This function is called when this collider/rigidbody has begun touching another rigidbody/collider
+    void OnCollisionEnter(Collision collision)
     {
-        rb = GetComponent<Rigidbody>();
-        rb.isKinematic = false; // or true if manually moved
+        // Check if the Rigidbody component is present before attempting to modify its velocity
+        if (rb != null)
+        {
+            // Set linear velocity to zero (stop movement)
+            rb.linearVelocity = Vector3.zero;
 
-       
-       
+            // Set angular velocity to zero (stop rotation)
+            rb.angularVelocity = Vector3.zero;
 
-        is_collide = false;
-        oncollision = false;
-    }
-
-    void Update()
-    {
-        is_collide = oncollision;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-
-        oncollision = true;
-        is_collide = true;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        oncollision = false;
-        is_collide = false;
+            // Optional: Make the Rigidbody kinematic after stopping to prevent further physics interactions
+            // rb.isKinematic = true;
+            is_collide = true;
+            oncollision = true;
+        }
+        
     }
 }
