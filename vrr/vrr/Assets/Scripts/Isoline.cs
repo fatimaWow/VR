@@ -21,17 +21,39 @@ public class Isoline : MonoBehaviour
 
     private Mesh mesh;
     stopOnCollision sphere;
+    stopOnCollision sphere2;
 
-   // public stopOnCollision[] spheres;
+   // private Isoline sphere2child;
+
+   
 
     void Awake()
     {
         //spheres = FindObjectsOfType<stopOnCollision>();
-         sphere = GetComponentInParent<stopOnCollision>();
+        sphere = GetComponentInParent<stopOnCollision>();
+
+
+        GameObject[] projectileObjects = GameObject.FindGameObjectsWithTag("Projectile");
+        foreach (GameObject obj in projectileObjects)
+        {
+            // Skip self
+            if (obj == gameObject) continue;
+
+            sphere2 = obj.GetComponent<stopOnCollision>();
+
+            if (sphere2 != null)
+            {
+             Debug.Log("Found another projectile: " + obj.name);
+             break; // only get the first one
+            }
+        }
+
+        //shpere2child = sphere2.GetComponentInChildren<Isoline>();
+
+
+
         InitializeMesh();
         GenerateRingMesh();
-       
-       
     }
 
  
@@ -71,11 +93,18 @@ public class Isoline : MonoBehaviour
                 transform.position = new Vector3((float)sphere.gameObject.transform.position.x, (float)sphere.gameObject.transform.position.y, (float)sphere.gameObject.transform.position.z);
                 //Vector3 hillCenter = new Vector3(x,0,z);
                 outerRadius = sphere.radius*1.5f;
-                innerRadius = sphere.radius / (float)1.0526;   
+                innerRadius = sphere.radius *1.45f;   
                   
                 GenerateRingMesh();
             }
         }
+
+        public bool Intersect(Vector3 vertex, Vector3 sphereCenter, float sphereRadius)
+{
+    Vector3 offset = vertex - sphereCenter;  // vector from sphere center to vertex
+    return offset.sqrMagnitude < sphereRadius * sphereRadius; // use squared distance for efficiency
+}
+
 
     
 
@@ -96,12 +125,34 @@ public class Isoline : MonoBehaviour
             float z = Mathf.Sin(angle);
 
             // Outer vertex
-            vertices.Add(new Vector3(x * outerRadius, yPosition, z * outerRadius));
+             vertices.Add(new Vector3(x * outerRadius, yPosition, z * outerRadius));
             uv.Add(new Vector2((float)i / segments, 1f));
+
+
+            Vector3 globalOuter = transform.TransformPoint(vertices[vertices.Count - 1]); 
+            if (sphere2 != null && Intersect(globalOuter, sphere2.transform.position, sphere2.radius * 1.45f))
+            {
+
+                Debug.Log("intersect");
+              // vertex is inside sphere2, hide it by moving it to zero or y=-100 etc.
+             vertices[vertices.Count - 1]= Vector3.zero; 
+            }   
+
 
             // Inner vertex
             vertices.Add(new Vector3(x * innerRadius, yPosition, z * innerRadius));
             uv.Add(new Vector2((float)i / segments, 0f));
+
+
+
+            Vector3 globalInner = transform.TransformPoint(vertices[vertices.Count - 1]);
+            if (sphere2 != null && Intersect(globalOuter, sphere2.transform.position, sphere2.radius * 1.45f))
+            {
+                // vertex is inside sphere2, hide it by moving it to zero or y=-100 etc.
+               vertices[vertices.Count - 1] = Vector3.zero; 
+
+                 Debug.Log("intersect");
+            }
         }
 
         // Generate triangles (quad strips)
